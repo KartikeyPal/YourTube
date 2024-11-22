@@ -3,27 +3,35 @@ import  './Comment.css'
 import moment from 'moment'
 import { useSelector,useDispatch } from 'react-redux'
 import { editcomment,deletecomment } from '../../action/comment'
-const Displaycommment = ({cid,commentbody,userid,commenton,usercommented} ) => {
+
+const Displaycommment=({cid,commentbody,userid,commenton,usercommented})=>{
     const [edit,setedit]=useState(false)
-    const[cmtnody,setcommentbdy]=useState("")
+    const[cmtbody,setcommentbdy]=useState("")
     const [cmtid,setcmntid]=useState("")
     const dispatch=useDispatch()
     const currentuser=useSelector(state => state.currentuserreducer);
+
     const handleedit=(ctid,ctbdy)=>{
         setedit(true)
         setcmntid(ctid)
         setcommentbdy(ctbdy)
     }
-    const haneleonsubmit=(e)=>{
-        // e.preventDefault();
-        if(!cmtnody){
-            alert("type your comment");
-        }else{
-            dispatch(editcomment({id:cmtid,commentbody:cmtnody}))
-            setcommentbdy("")
+
+    const haneleonsubmit = (e) => {
+        e.preventDefault(); n
+        if (!cmtbody) {
+            alert('Type your comment');
+        } else {
+            dispatch(editcomment({ id: cmtid, commentbody: cmtbody }))
+                .then(() => {
+                    setedit(false);
+                    setcommentbdy('');
+                })
+                .catch(error => {
+                    console.error('Error editing comment:', error);
+                });
         }
-        setedit(false)
-    }
+    };
     const handledel=(id)=>{
         dispatch(deletecomment(id))
     }
@@ -32,8 +40,8 @@ const Displaycommment = ({cid,commentbody,userid,commenton,usercommented} ) => {
     <>
     {edit?(
         <>
-        <form  className="comments_sub_form_commments" onSubmit={haneleonsubmit() }>
-            <input type="text" onChange={(e)=>setcommentbdy(e.target.value)} placeholder='Edit comments..' value={cmtnody} className="comment_ibox" />
+        <form  className="comments_sub_form_commments" onSubmit={haneleonsubmit}>
+            <input type="text" onChange={(e)=>setcommentbdy(e.target.value)} placeholder='Edit comments..' value={cmtbody} className="comment_ibox" />
             <input type="submit" value="change" className="comment_add_btn_comments" />
         </form>
         </>

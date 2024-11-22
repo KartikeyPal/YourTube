@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import logo from "./logo.ico"
 import "./Navbar.css"
 import { useDispatch, useSelector } from 'react-redux'
-import { Link, generatePath } from "react-router-dom"
+import { Link} from "react-router-dom"
 import { RiVideoAddLine } from "react-icons/ri"
 import { IoMdNotificationsOutline } from "react-icons/io"
 import { BiUserCircle } from "react-icons/bi"
@@ -12,17 +12,15 @@ import axios from "axios"
 import { login } from "../../action/auth"
 import { useGoogleLogin,googleLogout } from '@react-oauth/google';
 import { setcurrentuser } from '../../action/currentuser';
-
 import {jwtDecode} from "jwt-decode"
+
 const Navbar = ({ toggledrawer, seteditcreatechanelbtn }) => {
     const [authbtn, setauthbtn] = useState(false)
     const [user, setuser] = useState(null)
     const [profile, setprofile] = useState([])
     const dispatch = useDispatch()
-   
-
     const currentuser = useSelector(state => state.currentuserreducer);
-    // console.log(currentuser)
+
     const successlogin = () => {
         if (profile.email) {
             dispatch(login({ email: profile.email }))
@@ -37,29 +35,31 @@ const Navbar = ({ toggledrawer, seteditcreatechanelbtn }) => {
         onError: (error) => console.log("Login Failed", error)
     });
 
-    useEffect(
-        () => {
-            if (user) {
-                axios.get(`https://www.googleapis.com/oauth2/v1/userinfo?access_token=${user.access_token}`, {
-                    headers: {
-                        Authorization: `Bearer ${user.access_token}`,
-                        Accept: 'application/json'
-                    }
-                })
-                    .then((res) => {
-                        setprofile(res.data)
-                        successlogin()
-                    })
+    useEffect(() => {
+        if (user) {
+            axios.get(`https://www.googleapis.com/oauth2/v1/userinfo?access_token=${user.access_token}`, {
+                headers: {
+                    Authorization: `Bearer ${user.access_token}`,
+                    Accept: 'application/json'
+                }
+            })
+            .then((res) => {
+                setprofile(res.data);
+                successlogin();
+            })
+            .catch((error) => {
+                console.error("Error fetching user profile:", error);
+            });
+        }
+    }, [user]);
 
-            }
-        },
-        [user]
-    );
-    const logout=()=>{
-        dispatch(setcurrentuser(null))
-        googleLogout()
-        localStorage.clear()
-    }
+    const logout = () => {
+        dispatch(setcurrentuser(null));
+        googleLogout();
+        localStorage.clear();
+        console.log("User logged out successfully");
+    };
+
     useEffect(()=>{
         const token=currentuser?.token;
         if(token){
