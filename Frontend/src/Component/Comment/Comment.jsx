@@ -9,7 +9,6 @@ const Comment = ({ videoid }) => {
     const [commenttext, setcommentext] = useState("")
     const currentuser = useSelector(state => state.currentuserreducer);
     const commentlist = useSelector(state => state.commentreducer)
-    console.log(commentlist)
 
     const handleonsubmit = (e) => {
         e.preventDefault();

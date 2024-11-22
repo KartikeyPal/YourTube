@@ -7,14 +7,16 @@ import Comment from '../../Component/Comment/Comment'
 import { viewvideo } from '../../action/video'
 import { addtohistory } from '../../action/history'
 import { useSelector,useDispatch } from 'react-redux'
+import { incrementPoints } from '../../action/incrementPoints.js'
 const Videopage = () => {
     const { vid } = useParams();
     const dispatch=useDispatch()
     const vids=useSelector((state)=>state.videoreducer)
-
     const vv = vids?.data.filter((q) => q._id === vid)[0]
    
     const currentuser = useSelector(state => state.currentuserreducer);
+    // const points = useSelector(state => state.incrementPointsReducer);
+
     const handleviews=()=>{
         dispatch(viewvideo({id:vid}))
     }
@@ -30,12 +32,30 @@ const Videopage = () => {
         }
         handleviews()
     },[])
+
+    const handleVideoWatched = async () => {
+        console.log("this is the currentUser from showvideo component =>\n", currentuser);
+        // console.log("points => " ,points);
+        try {
+          if(currentuser){
+          const points = 5;
+          dispatch(incrementPoints({
+            userId: currentuser?.result._id,
+            points: points
+          }))}
+          
+        } catch (error) {
+          console.error('Not able to allocate points:', error);
+        }
+      };
     return (
         <>
             <div className="container_videoPage">
                 <div className="container2_videoPage">
                     <div className="video_display_screen_videoPage">
-                        <video src={`https://yourtube-0wbt.onrender.com/${vv?.filepath}`} className="video_ShowVideo_videoPage" controls></video>
+                        {/* <video src={`https://yourtube-0wbt.onrender.com/${vv?.filepath}`} className="video_ShowVideo_videoPage" controls></video> */}
+                        <video src={`http://localhost:5000/${vv?.filepath}`} className="video_ShowVideo_videoPage" controls  onEnded={handleVideoWatched}></video>
+
                         <div className="video_details_videoPage">
                             <div className="video_btns_title_VideoPage_cont">
                                 <p className="video_title_VideoPage">{vv?.title}</p>

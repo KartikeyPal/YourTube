@@ -5,7 +5,7 @@ const historyreducer = (state = { data: null }, action) => {
         case "FETCH_ALL_HISTORY":
             return { ...state, data: action?.payload }
         default:
-            return state
+            return state;
     }
 }
 

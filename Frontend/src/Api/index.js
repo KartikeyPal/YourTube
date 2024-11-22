@@ -1,6 +1,6 @@
 import axios from "axios"
-// const API=axios.create({baseURL:`http://localhost:5000/`})
-const API=axios.create({baseURL:`https://yourtube-0wbt.onrender.com`});
+const API=axios.create({baseURL:`http://localhost:5000/`})
+// const API=axios.create({baseURL:`https://yourtube-0wbt.onrender.com`});
 
 
 API.interceptors.request.use((req)=>{
@@ -46,3 +46,6 @@ export const deletelikedvideo=(videoid,viewer)=>API.delete(`/video/deletelikevid
 export const addtowatchlater=(watchlaterdata)=>API.post('/video/watchlater',watchlaterdata)
 export const getallwatchlater=()=>API.get('/video/getallwatchlater')
 export const deletewatchlater=(videoid,viewer)=>API.delete(`/video/deletewatchlater/${videoid}/${viewer}`)
+
+//Points routes
+export const incrementPoints = (userid,points) => API.post('/user/incrementPoints',userid,points);

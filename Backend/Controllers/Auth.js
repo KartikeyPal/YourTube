@@ -54,7 +54,7 @@ export const incrementPoints = async(req,res)=>{
             message: "User not found"
         });
     }
-    res.status(200).json({
+   return res.status(200).json({
         user: user,
         message: "5 points added"
     })
