@@ -48,7 +48,7 @@ export const incrementPoints = async(req,res)=>{
             {$inc: {points}},
             {new:true}
     )
-    console.log(user);
+    // console.log(user);
     if(!user){
         return res.status(404).json({
             message: "User not found"
