@@ -1,4 +1,5 @@
 import comment from "../Models/comment.js";
+import {textTranslation} from "../Helper/googleTranslate.js";
 import mongoose from "mongoose";
 
 export const postcomment = async (req, res) => {
@@ -53,4 +54,22 @@ export const editcomment = async (req, res) => {
         res.status(400).json(error.message)
         return
     }
+}
+
+export const translatecomment = async(req,res) =>{
+    try {
+        const {cmtText,target} = req.body;
+        const newText = await textTranslation(cmtText,target);
+        res.status(200).json({
+            success: true,
+            data: newText
+        })
+        
+    } catch (error) {
+        res.status(500).json({
+            message: "Error translating text"
+        })
+    }
+
+    
 }
