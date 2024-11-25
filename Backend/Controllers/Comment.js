@@ -58,11 +58,11 @@ export const editcomment = async (req, res) => {
 
 export const translatecomment = async(req,res) =>{
     try {
-        const {cmtText,target} = req.body;
-        const newText = await textTranslation(cmtText,target);
+        const {text,targetLanguage} = req.body;
+        const translatedText = await textTranslation(text,targetLanguage);
         res.status(200).json({
             success: true,
-            data: newText
+            translatedText
         })
         
     } catch (error) {

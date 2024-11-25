@@ -31,6 +31,7 @@ export const postcomment=(commentdata)=>API.post('/comment/post',commentdata)
 export const deletecomment=(id)=>API.delete(`/comment/delete/${id}`)
 export const editcomment=(id,commentbody)=>API.patch(`/comment/edit/${id}`,{commentbody})
 export const getallcomment=()=>API.get('/comment/get')
+export const translatecomment =(data)=>API.post('/comment/translateCmt',data);
 
 // History routes
 export const addtohistory=(historydata)=>API.post("/video/history",historydata)

@@ -37,3 +37,13 @@ export const deletecomment=(id)=>async(dispatch)=>{
         console.log(error);
     }
 }
+
+export const translateComment=async(text,targetLanguage)=>{
+    try {
+        const response = await api.translatecomment({text,targetLanguage});
+        return response.data.translatedText; 
+    } catch (error) {
+        console.error("Translation API error:", error);
+        throw(error);
+    }
+};

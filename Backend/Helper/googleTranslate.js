@@ -18,7 +18,6 @@ const translate = new Translate({
 
 export const textTranslation = async(text,target)=>{
     const [translation] = await translate.translate(text,target);
-    console.log(translation);
     return translation;
 }
 
