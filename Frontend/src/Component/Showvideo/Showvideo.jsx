@@ -15,7 +15,7 @@ const Showvideo = ({vid,currentuser}) => {
       <Link to={`/videopage/${vid._id}`}>
         
         {/* <video src={`https://yourtube-0wbt.onrender.com/${vid.filepath}`} className='video_ShowVideo' controls /> */}
-        <video src={`http://localhost:5000/${vid.filepath}`} className='video_ShowVideo' controls />
+        <video src={`http://localhost:5000/${vid.filepath}`} className='video_ShowVideo'  />
 
     </Link>
     <div className="video_description">

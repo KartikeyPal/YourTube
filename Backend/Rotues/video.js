@@ -1,7 +1,7 @@
 import express from "express"
 import { likevideocontroller } from "../Controllers/like.js";
 import { viewscontroller } from "../Controllers/views.js";
-import { uploadvideo,getallvideos } from "../Controllers/video.js";
+import { uploadvideo,getallvideos,download } from "../Controllers/video.js";
 import { historycontroller,deletehistory,getallhistorycontroller } from "../Controllers/History.js";
 import { watchlatercontroller,getallwatchlatervontroller,deletewatchlater } from "../Controllers/watchlater.js";
 import { likedvideocontroller,getalllikedvideo,deletelikedvideo } from "../Controllers/likedvideo.js";
@@ -27,4 +27,5 @@ routes.post('/likevideo',auth,likedvideocontroller)
 routes.get('/getalllikevide',getalllikedvideo)
 routes.delete('/deletelikevideo/:videoid/:viewer',auth,deletelikedvideo)
 
+routes.get('/downloads/:videoId',download)
 export default routes

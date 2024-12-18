@@ -3,11 +3,13 @@ import "./Comment.css"
 import Displaycommment from './Displaycomment'
 import { useSelector,useDispatch  } from 'react-redux'
 import { postcomment } from '../../action/comment'
+import commentreducer from '../../Reducers/comment'
 const Comment = ({ videoid }) => {
     const dispatch = useDispatch()
     const [commenttext, setcommentext] = useState('')
     const currentuser = useSelector(state => state.currentuserreducer);
     const commentlist = useSelector(state => state.commentreducer)
+    console.log(commentlist);
 
     const handleonsubmit = (e) => {
         e.preventDefault();
@@ -15,6 +17,11 @@ const Comment = ({ videoid }) => {
             if (!commenttext) {
                 alert("please type your comment!!")
             } else {
+                const specialChar = /[^a-zA-Z0-9\s.,?!]/;
+                if (specialChar.test(commenttext)) {
+                    alert("Comments with special characters are not allowed.");
+                    return;
+                }
                 dispatch(postcomment({
                     videoid: videoid,
                     userid: currentuser?.result._id,
@@ -53,6 +60,10 @@ const Comment = ({ videoid }) => {
                         commentbody={m.commentbody} 
                         commenton={m.commenton} 
                         usercommented={m.usercommented} 
+                        likes={m.likes}
+                        dislikes={m.dislikes} 
+                        likedby={m.likedby}
+                        dislikedby={m.dislikedby}
                     />
                     ))}
             </div>

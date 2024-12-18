@@ -8,6 +8,8 @@ import { viewvideo } from '../../action/video'
 import { addtohistory } from '../../action/history'
 import { useSelector,useDispatch } from 'react-redux'
 import { incrementPoints } from '../../action/incrementPoints.js'
+import axios from "axios"
+
 const Videopage = () => {
     const { vid } = useParams();
     const dispatch=useDispatch()
@@ -48,6 +50,29 @@ const Videopage = () => {
           console.error('Not able to allocate points:', error);
         }
       };
+
+
+      const handleDownloadVideo = async () =>{
+        try {
+
+            const response = await axios.get(`http://localhost:5000/video/downloads/${vid}`, {
+                responseType: 'blob', // Important for file download
+            });
+            console.log(response);
+
+            const url = window.URL.createObjectURL(new Blob([response.data]));
+            // console.log("this is the response: ",url);
+            const link = document.createElement('a');
+            link.href = url;
+            link.setAttribute('download', 'video.mp4'); 
+            document.body.appendChild(link);
+            link.click();
+        } catch (error) {
+            console.error(error.message);
+        }
+      }
+
+
     return (
         <>
             <div className="container_videoPage">
@@ -58,11 +83,12 @@ const Videopage = () => {
 
                         <div className="video_details_videoPage">
                             <div className="video_btns_title_VideoPage_cont">
-                                <p className="video_title_VideoPage">{vv?.title}</p>
+                                <p className="video_title_VideoPage">{vv?.videotitle}</p>
+                                <button className='video_download_button' onClick={handleDownloadVideo}>Download</button>
                                 <div className="views_date_btns_VideoPage">
                                     <div className="views_videoPage">
                                         {vv?.views} views <div className="dot"></div>{" "}
-                                        {moment(vv?.createdat).fromNow()}
+                                        {moment(vv?.createdAt).fromNow()}
                                     </div>
                                     <Likewatchlatersavebtns vv={vv} vid={vid} />
                                 </div>

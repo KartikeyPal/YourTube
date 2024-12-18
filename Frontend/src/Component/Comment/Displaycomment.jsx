@@ -15,12 +15,16 @@ const Displaycommment = ({
   userid,
   commenton,
   usercommented,
+  likes,
+  dislikes,
+  likedby,
+  dislikedby
 }) => {
   const [edit, setedit] = useState(false);
   const [cmtbody, setcommentbdy] = useState("");
   const [cmtid, setcmntid] = useState("");
   const [TranslatedText, setTranslatedText] = useState();
-  const [targetLanguage, setTargetLanguage] = useState("en");
+  const [targetLanguage, setTargetLanguage] = useState(languages[0].code);
   const dispatch = useDispatch();
   const currentuser = useSelector((state) => state.currentuserreducer);
 
@@ -28,18 +32,24 @@ const Displaycommment = ({
     setedit(true);
     setcmntid(ctid);
     setcommentbdy(ctbdy);
+    setTranslatedText(ctbdy);
   };
 
   const haneleonsubmit = (e) => {
+    const specialChar=/[^a-zA-Z0-9\s.,?!]/;
     e.preventDefault();
-    n;
     if (!cmtbody) {
       alert("Type your comment");
     } else {
+      if (specialChar.test(cmtbody)) {
+        alert("Comments with special characters are not allowed.");
+        return;
+      }
       dispatch(editcomment({ id: cmtid, commentbody: cmtbody }))
         .then(() => {
           setedit(false);
           setcommentbdy("");
+          setTranslatedText(cmtbody);
         })
         .catch((error) => {
           console.error("Error editing comment:", error);
@@ -56,9 +66,27 @@ const Displaycommment = ({
       setTranslatedText(translated);
     } catch (error) {
       alert("Failed to translate the comment.");
+      setTranslatedText(text);
+
     }
   };
 
+  const handleLike =()=>{
+    
+    if(!currentuser){
+      alert("Login to like the comment");
+      return;
+    }
+    //calling api
+  }
+
+  const handleDislike=()=>{
+    if(!currentuser){
+      alert("Login to dislike the comment");
+      return;
+    }
+    //calling api
+  }
 
   return (
     <>
@@ -87,27 +115,30 @@ const Displaycommment = ({
       ) : (
         <p className="comment_body">{commentbody}</p>
       )}
+      <div className="comment-actions">
+        <button onClick={handleLike}>👍 Like ({likes})</button>
+        <button onClick={handleDislike}>👎 Dislike ({dislikes})</button>
+        <button onClick={() => handletranslate(commentbody, targetLanguage)}>
+          Translate
+        </button>
+        <select onChange={(e) => setTargetLanguage(e.target.value)}>
+          {languages.map((lang) => (
+            <option key={lang.code} value={lang.code}>
+              {lang.lang}
+            </option>
+          ))}
+        </select>
+      </div>
+      
       <p className="usercommented">
         {" "}
         - {usercommented} commented {moment(commenton).fromNow()}
       </p>
       {currentuser?.result?._id === userid && (
-        <div>
           <p className="EditDel_DisplayCommendt">
             <i onClick={() => handleedit(cid, commentbody)}>Edit</i>
             <i onClick={() => handledel(cid)}>Delete</i>
           </p>
-          <button onClick={() => handletranslate(commentbody, targetLanguage)}>
-            Translate
-          </button>
-          <select onChange={(e)=>setTargetLanguage(e.target.value)}>
-            {languages.map((lang) => (
-              <option key={lang.code} value={lang.code}>
-                {lang.lang}
-              </option>
-            ))}
-          </select>
-        </div>
       )}
     </>
   );

@@ -47,3 +47,13 @@ export const translateComment=async(text,targetLanguage)=>{
         throw(error);
     }
 };
+
+export const likecomment=(id,userId)=>async(dispatch)=>{
+    try {
+        await api.likecomment({id,userId});
+        dispatch(getallcomment());
+    } catch (error) {
+        console.log("erroe in like comment");
+        console.log(error);
+    }
+}
