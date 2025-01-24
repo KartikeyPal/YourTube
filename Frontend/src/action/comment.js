@@ -49,11 +49,22 @@ export const translateComment=async(text,targetLanguage)=>{
 };
 
 export const likecomment=(id,userId)=>async(dispatch)=>{
+    // console.log(id,userId)
     try {
         await api.likecomment({id,userId});
         dispatch(getallcomment());
     } catch (error) {
         console.log("erroe in like comment");
+        console.log(error);
+    }
+}
+
+export const dislikecomment =(id, userId) => async(dispatch)=>{
+    try {
+        await api.dislikecomment({id,userId});
+        dispatch(getallcomment());
+    } catch (error) {
+        console.log("error in dislike comment")
         console.log(error);
     }
 }

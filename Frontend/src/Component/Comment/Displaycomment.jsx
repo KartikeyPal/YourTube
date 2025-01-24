@@ -6,8 +6,11 @@ import {
   editcomment,
   deletecomment,
   translateComment,
+  likecomment,
+  dislikecomment
 } from "../../action/comment";
 import {languages} from '../../utilities/language' 
+
 
 const Displaycommment = ({
   cid,
@@ -71,21 +74,22 @@ const Displaycommment = ({
     }
   };
 
-  const handleLike =()=>{
-    
+  const handleLike =(id)=>{
     if(!currentuser){
       alert("Login to like the comment");
       return;
     }
-    //calling api
+    dispatch(likecomment(id,currentuser.result._id))
+    
   }
 
-  const handleDislike=()=>{
+  const handleDislike=(id)=>{
     if(!currentuser){
       alert("Login to dislike the comment");
       return;
     }
     //calling api
+    dispatch(dislikecomment(id,currentuser.result._id));
   }
 
   return (
@@ -116,8 +120,8 @@ const Displaycommment = ({
         <p className="comment_body">{commentbody}</p>
       )}
       <div className="comment-actions">
-        <button onClick={handleLike}>👍 Like ({likes})</button>
-        <button onClick={handleDislike}>👎 Dislike ({dislikes})</button>
+        <button onClick={()=>handleLike(cid)}>👍 Like ({likes})</button>
+        <button onClick={()=>handleDislike(cid)}>👎 Dislike ({dislikes})</button>
         <button onClick={() => handletranslate(commentbody, targetLanguage)}>
           Translate
         </button>
